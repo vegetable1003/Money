@@ -30,3 +30,20 @@ Hello! 您好，歡迎您成為 Master Finance 的好友！
     line_bot_api.reply_message(
         event.reply_token,
         [text_message,sticker_message])
+    
+def push_msg(event,msg):
+    try:
+        user_id=event.source.user_id
+        line_bot_api.push_message(user_id,TextSendMessage(text=msg))
+    except:
+        room_id=event.source.room_id
+        line_bot_api.push_message(room_id,TextSendMessage(text=msg))
+def Usage(event):
+    push_msg(event,"🔍查詢方法🔍  \
+             \n\
+             \n💣 小幫手可以查詢油價➡匯率➡股票💣 \
+             \n\
+             \n💣 油價通知➡輸入查詢股票💣 \
+             \n💣 匯率通知➡輸入查詢匯率💣 \
+             \n💣 匯率兌換➡換匯USD/TWD💣 \
+             \n💣 股價查詢➡輸入#股價代號#💣 ")
