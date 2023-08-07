@@ -37,32 +37,47 @@ def handle_message(event):
             TextSendMessage(text=content)
         )
 
+@handler.add(FollowEvent)
+def handle_folow(event):
+    welcome_msg ='''Hello! 您好，歡迎您成為 Master Finance 的好友！
+                                   
+我是Master 財經小幫手
+                                   
+-這裡有股票、匯率資訊哦～
+-直接點選下方[圖中]選單功能
+                                   
+期待您的光臨'''
+
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=welcome_msg))    
+
 
     ###########先進趨勢#########################
     
-    if event.message.text=='@先進趨勢':
-        buttons_template = TemplateSendMessage(
-            alt_text="小幫手 template",
-            template=ButtonsTemplate(
-                title="選擇服務",
-                text="請選擇",
-                thumbnail_image_url="https://i.imgur.com/Ssns07Ub.jpg",
-                actions=[
-                    MessageTemplateAction(
-                        label="油價查詢",
-                        text="油價查詢"
-                    ),
-                     MessageTemplateAction(
-                        label="匯率查詢",
-                        text="匯率查詢"
-                    ),
-                     MessageTemplateAction(
-                        label="股價查詢",
-                        text="股價查詢"
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token,buttons_template)
+    # if event.message.text=='@先進趨勢':
+    #     buttons_template = TemplateSendMessage(
+    #         alt_text="小幫手 template",
+    #         template=ButtonsTemplate(
+    #             title="選擇服務",
+    #             text="請選擇",
+    #             thumbnail_image_url="https://i.imgur.com/Ssns07Ub.jpg",
+    #             actions=[
+    #                 MessageTemplateAction(
+    #                     label="油價查詢",
+    #                     text="油價查詢"
+    #                 ),
+    #                  MessageTemplateAction(
+    #                     label="匯率查詢",
+    #                     text="匯率查詢"
+    #                 ),
+    #                  MessageTemplateAction(
+    #                     label="股價查詢",
+    #                     text="股價查詢"
+    #                 )
+    #             ]
+    #         )
+    #     )
+    #     line_bot_api.reply_message(event.reply_token,buttons_template)
 if __name__ =="__main__":
     app.run()
