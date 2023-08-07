@@ -21,11 +21,14 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    profile= line_bot_api.get_profile(event.source.user_id)
+    uid=profile.user_id
+    message_text =str(event.message.text).lower()
+    
+    ######## 自動回覆一樣的訊息 #####################
     # message=TextSendMessage(text=event.message.text)
     # line_bot_api.reply_message(event.reply_token , message)
-
-    message_text =str(event.message.text).lower()
-    ########使用說明 選單 油價查詢########################
+    ####### 使用說明 選單 油價查詢 ##################
     if message_text =='@使用說明':
         about_us_event(event)
         Usage(event)
@@ -36,17 +39,15 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=content)
         )
+    ########### 股票區 #############################
+    if event.message.text == "股價查詢":
+        line_bot_api.push_message(uid,TextSendMessage("請輸入#加股票代號..."))
 
 @handler.add(FollowEvent)
 def handle_folow(event):
-    welcome_msg ='''Hello! 您好，歡迎您成為 Master Finance 的好友！
+    welcome_msg ='''Hello! 您好，歡迎您再次成為 恭禧發財 的好友！
                                    
-我是Master 財經小幫手
-                                   
--這裡有股票、匯率資訊哦～
--直接點選下方[圖中]選單功能
-                                   
-期待您的光臨'''
+封鎖解除了'''
 
     line_bot_api.reply_message(
         event.reply_token,
