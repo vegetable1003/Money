@@ -1,6 +1,6 @@
 from flask import Flask,request,abort
 from linebot import(LineBotApi,WebhookHandler,exceptions)
-from linebot.exceptions import (InvaliSignatureError)
+from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import  *
 
 
@@ -22,7 +22,7 @@ def callback():
 
     try:
         handler.handle(body,signature)
-    except IndentationError:
+    except InvalidSignatureError:
         abort(400)
 
     return "OK"
