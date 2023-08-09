@@ -26,7 +26,7 @@ def stock_reply_other(stockNumber):
 def show_Button():
     flex_message = FlexSendMessage(
             alt_text="幣別種類",
-            contents={
+                    contents={
         "type": "bubble",
         "body": {
             "type": "box",
@@ -51,7 +51,7 @@ def show_Button():
             "contents": [
             {
                 "type": "box",
-                "layout": "vertical",
+                "layout": "horizontal",
                 "contents": [
                 {
                     "type": "button",
@@ -98,7 +98,7 @@ def show_Button():
             },
             {
                 "type": "box",
-                "layout": "vertical",
+                "layout": "horizontal",
                 "contents": [
                 {
                     "type": "button",
@@ -144,7 +144,7 @@ def show_Button():
             },
             {
                 "type": "box",
-                "layout": "vertical",
+                "layout": "horizontal",
                 "contents": [
                 {
                     "type": "button",
@@ -190,7 +190,7 @@ def show_Button():
             },
             {
                 "type": "box",
-                "layout": "vertical",
+                "layout": "horizontal",
                 "contents": [
                 {
                     "type": "button",
@@ -201,7 +201,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#7373B9",
                     "margin": "sm"
                 },
                 {
@@ -213,7 +213,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#7373B9",
                     "margin": "sm"
                 },
                 {
@@ -225,7 +225,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#7373B9",
                     "margin": "sm"
                 }
                 ]
@@ -236,7 +236,7 @@ def show_Button():
             },
             {
                 "type": "box",
-                "layout": "vertical",
+                "layout": "horizontal",
                 "contents": [
                 {
                     "type": "button",
@@ -247,7 +247,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#5CADAD",
                     "margin": "sm"
                 },
                 {
@@ -259,7 +259,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#5CADAD",
                     "margin": "sm"
                 },
                 {
@@ -271,7 +271,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#5CADAD",
                     "margin": "sm"
                 }
                 ]
@@ -282,7 +282,7 @@ def show_Button():
             },
             {
                 "type": "box",
-                "layout": "vertical",
+                "layout": "horizontal",
                 "contents": [
                 {
                     "type": "button",
@@ -293,7 +293,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#84C1FF",
                     "margin": "sm"
                 },
                 {
@@ -305,7 +305,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#84C1FF",
                     "margin": "sm"
                 },
                 {
@@ -317,7 +317,7 @@ def show_Button():
                     },
                     "gravity": "center",
                     "style": "primary",
-                    "color": "#CC561E",
+                    "color": "#84C1FF",
                     "margin": "sm"
                 }
                 ]
