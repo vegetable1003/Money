@@ -1,5 +1,5 @@
-
 import requests
+
 
 def getCurrencyName(currency):
     currency_list = { 
@@ -26,16 +26,17 @@ def getCurrencyName(currency):
     except: return "無可支援的外幣"
     return currency_name
 
-def getExchangeRate(msg): #不同貨幣直接換算(非台幣)
+
+def getExchangeRate(msg):
     """
     Sample
     code = '換匯USD/TWD/100'
     code = '換匯USD/JPY/100'
     """
     currency_list = msg[2:].split("/")
-    currency = currency_list[0]#輸入想查詢的匯率
-    currency1 = currency_list[1] #輸入想兌換的匯率
-    money_value = currency_list[2]#輸入金額數值
+    currency = currency_list[0]
+    currency1 = currency_list[1]
+    money_value = currency_list[2]
     url_coinbase = "https://api.coinbase.com/v2/exchange-rates?currency=" + currency
 
     res = requests.get(url_coinbase)
