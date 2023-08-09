@@ -49,15 +49,13 @@ def handle_message(event):
         line_bot_api.push_message(uid,TextSendMessage("請輸入#加股票代號..."))
 
     ##股價查詢
-##股價查詢
-    if re.match("想知道股價[0-9]:", msg):
-        stockNumber = msg[2:6]
-        btn_msg = stock_reply_other(stockNumber)
+    if re.match("想知道股價:", msg):
+        btn_msg = stock_reply_other(msg)
         line_bot_api.push_message(uid, btn_msg)
         return 0
     if (emsg.startswith('#')):
         text = emsg[1:]
-        content =''
+        content =' '
 
         stock_rt = twstock.realtime.get(text)
         my_datetime = datetime.datetime.fromtimestamp(stock_rt['timestamp']+8*60*60)
