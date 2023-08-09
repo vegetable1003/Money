@@ -2,9 +2,11 @@ from line_bot_api import *
 from events.basic import *
 from events.oil import *
 from events.msg_template import *
+from  mongodb import *
 import re
 import twstock
 import datetime
+
 
 app = Flask(__name__)
 
@@ -31,13 +33,14 @@ def handle_message(event):
     message_text = str(event.message.text).lower()
     msg = str(event.message.text).upper().strip()
     emsg = event.message.text
+    user_name=profile.display_name #使用者名稱
 
-    # ############"使用說明"############
+    #############"使用說明"############
     if message_text == "@使用說明":
         about_us_event(event)
         Usage(event)
 
-    # ############"油價查詢"############
+    #############"油價查詢"############
     if message_text == "油價查詢":
         content = oil_price()
         line_bot_api.reply_message(
@@ -45,7 +48,7 @@ def handle_message(event):
         TextSendMessage(content)
         )
 
-    # ############"股價查詢"############
+    #############"股價查詢"############
     if message_text == "股價查詢":
         line_bot_api.push_message(
         uid, 
@@ -58,6 +61,18 @@ def handle_message(event):
         btn_msg = stock_reply_other(stockNumber)
         line_bot_api.push_message(uid , btn_msg)
         return 0
+    #新增使用者關注的股票到mongodb
+    if re.match("關注[0-9]{4}[<>][0-9]" ,msg):
+        stockNumber =msg[2:6]
+        content =write_my_stock(uid,user_name,stockNumber, msg[6:7], msg[7:])
+        line_bot_api.push_message(uid,TextSendMessage(content))
+    else:
+        content =write_my_stock(uid,user_name,stockNumber,'未設定','未設定')
+        line_bot_api.push_message(uid,TextSendMessage(content))
+        return 0
+    if(msg.startswith("#")):
+        text=msg[1:]
+        content=""
     
     if (emsg.startswith('#')):
         text = emsg[1:]
