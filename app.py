@@ -1,59 +1,64 @@
 from line_bot_api import *
-from events.basic import  *
+from events.basic import *
 from events.oil import *
 from events.msg_template import *
 import re
+import twstock
 import datetime
-import twstock 
-app=Flask(__name__)
 
-@app.route("/callback",methods=["POST"])
+app = Flask(__name__)
+
+@app.route("/callback", methods=["POST"])
 def callback():
-    signature= request.headers['X-Line-Signature']
+    signature = request.headers["X-Line-Signature"]
 
-    body=request.get_data(as_text=True)
-    app.logger.info("Request body: "+body)
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
 
 
     try:
-        handler.handle(body,signature)
+        handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
 
     return "OK"
 
+# 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    profile= line_bot_api.get_profile(event.source.user_id)
-    uid=profile.user_id  #使用者ID
-    message_text =str(event.message.text).lower()
-    msg=str(event.message.text).upper().strip()  #使用者輸入內容
-    emsg=event.message.text
-    
-    ######## 自動回覆一樣的訊息 #####################
-    # message=TextSendMessage(text=event.message.text)
-    # line_bot_api.reply_message(event.reply_token , message)
-    ####### 使用說明 選單 油價查詢 ##################
-    if message_text =='@使用說明':
+    profile = line_bot_api.get_profile(event.source.user_id)
+    uid = profile.user_id  # 使用者id
+    message_text = str(event.message.text).lower()
+    msg = str(event.message.text).upper().strip()
+    emsg = event.message.text
+
+    # ############"使用說明"############
+    if message_text == "@使用說明":
         about_us_event(event)
         Usage(event)
 
-    if event.message.text=="油價":
-        content= oil_price()
+    # ############"油價查詢"############
+    if message_text == "油價查詢":
+        content = oil_price()
         line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=content)
+        event.reply_token, 
+        TextSendMessage(content)
         )
-    ########### 股票區 #############################
-    if event.message.text == "股價查詢":
-        line_bot_api.push_message(uid,TextSendMessage("請輸入#加股票代號..."))
 
-    ##股價查詢
-    if re.match("想知道股價[0-9]", msg):
-        msg = msg[5:]
-        btn_msg = stock_reply_other(msg)
-        line_bot_api.push_message(uid, btn_msg)
+    # ############"股價查詢"############
+    if message_text == "股價查詢":
+        line_bot_api.push_message(
+        uid, 
+        TextSendMessage("請輸入'#' + '股票代號'\n範例：#2330")
+        )
+
+    #股價查詢
+    if re.match("想知道股價[0-9]" , msg):
+        stockNumber = msg[5:9]
+        btn_msg = stock_reply_other(stockNumber)
+        line_bot_api.push_message(uid , btn_msg)
         return 0
+    
     if (emsg.startswith('#')):
         text = emsg[1:]
         content =''
@@ -70,6 +75,7 @@ def handle_message(event):
         content += '現價: %s / 開盤: %s\n'%(
             stock_rt['realtime']['latest_trade_price'],
             stock_rt['realtime']['open'])
+        
         content += '最高: %s / 最低:%s\n'%(
             stock_rt['realtime']['high'],
             stock_rt['realtime']['low'])
@@ -88,44 +94,47 @@ def handle_message(event):
             TextSendMessage(text=content)
         )
 
+     # ############"@小幫手"############
+    if message_text == "@小幫手":
+        button_template = ButtonsTemplate()
+        line_bot_api.reply_message(
+        event.reply_token, button_template
+        )
+
+        
 
 
 @handler.add(FollowEvent)
-def handle_folow(event):
-    welcome_msg ='''Hello! 您好，歡迎您再次成為 恭禧發財 的好友！
-                                   
-封鎖解除了'''
+def handle_follow(event):
+    emojis = [
+        {
+            "index": 0, 
+            "productId": "5ac21a18040ab15980c9b43e", 
+            "emojiId": "009"
+        }, 
+        {
+            "index": 16, 
+            "productId": "5ac21a18040ab15980c9b43e", 
+            "emojiId": "014"
+        }
+    ]
+
+    welcome_message = TextSendMessage(text='''$ Agave Finance $
+    您好，歡迎加入成為 Agave Finance 的好友!!!
+    我是Agave財經小幫手~
+    下方選單有：
+    股票查詢、油價查詢、匯率查詢、自動提醒、資訊整理、使用說明
+    使用上有任何問題可以參考使用說明''', emojis=emojis)
 
     line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=welcome_msg))    
-
-
-    ###########先進趨勢#########################
+        event.reply_token, welcome_message
+        )
     
-    # if event.message.text=='@先進趨勢':
-    #     buttons_template = TemplateSendMessage(
-    #         alt_text="小幫手 template",
-    #         template=ButtonsTemplate(
-    #             title="選擇服務",
-    #             text="請選擇",
-    #             thumbnail_image_url="https://i.imgur.com/Ssns07Ub.jpg",
-    #             actions=[
-    #                 MessageTemplateAction(
-    #                     label="油價查詢",
-    #                     text="油價查詢"
-    #                 ),
-    #                  MessageTemplateAction(
-    #                     label="匯率查詢",
-    #                     text="匯率查詢"
-    #                 ),
-    #                  MessageTemplateAction(
-    #                     label="股價查詢",
-    #                     text="股價查詢"
-    #                 )
-    #             ]
-    #         )
-    #     )
-    #     line_bot_api.reply_message(event.reply_token,buttons_template)
-if __name__ =="__main__":
+
+@handler.add(UnfollowEvent)
+def hadle_unfollow(event):
+    print(event)
+
+
+if __name__ == "__main__":
     app.run()
