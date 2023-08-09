@@ -116,7 +116,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
     
     ##換匯
-    if re.match("換匯[A-Z]{3}/[A/Z]{3}/[0-9]" ,msg):
+    if re.match("換匯[A-Z]{3}/[A-Z]{3}" ,msg):
         line_bot_api.push_message(uid,TextSendMessage('將為你做外匯計算...'))
         content=getExchangeRate(msg)
         line_bot_api.reply_message(uid,TextSendMessage(content))
