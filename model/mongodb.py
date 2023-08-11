@@ -39,7 +39,7 @@ def write_my_stock(userID, user_name, stockNumber, condition , target_price):
 
 #------------秀出使用者的股票條件------------------------------------
 def show_stock_setting(user_name,userID):
-    db: constructor_stock()
+    db = constructor_stock()
     collect = db[user_name]
     datalist = list(collect.find({"userID":userID}))
     if datalist == [] :return"你的股票清單為空，請透過指令新增股票至清單中"
