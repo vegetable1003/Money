@@ -35,7 +35,7 @@ def handle_message(event):
     else:
         None
     
-line_bot_api.push_message("USER ID or GROUP ID",TextSendMessage(text=""))
+#line_bot_api.push_message("USER ID or GROUP ID",TextSendMessage(text=""))
 
 #監聽所有來自 /callback的post request
 @app.route("/callback", methods=["POST"])
